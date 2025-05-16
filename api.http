@@ -12,6 +12,7 @@ GET http://localhost:3000/cards?set=Base%20Set&type=Creature&rarity=Common
 ###
 POST http://localhost:3000/cards/create
 Content-Type: application/json
+Authorization: Bearer <jwt_token>
 
 {
     "id": 126,
@@ -28,6 +29,7 @@ Content-Type: application/json
 ###
 PUT http://localhost:3000/cards/13
 Content-Type: application/json
+Authorization: Bearer <jwt_token>
 
 {
     "id": 126,
@@ -40,3 +42,7 @@ Content-Type: application/json
     "rarity": "Common",
     "cost": 3
 }
+
+###
+DELETE http://localhost:3000/cards/13
+Authorization: Bearer <jwt_token>

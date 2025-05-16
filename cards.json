@@ -1291,6 +1291,28 @@
       "toughness": 2500,
       "rarity": "Common",
       "cost": 3
+    },
+    {
+      "id": 128,
+      "name": "asdfd Magus",
+      "set": "Base Set",
+      "cardNumber": 1,
+      "type": "Creature",
+      "power": 3000,
+      "toughness": 2500,
+      "rarity": "Common",
+      "cost": 3
+    },
+    {
+      "id": 129,
+      "name": "asdfd Magus",
+      "set": "Base Set",
+      "cardNumber": 1,
+      "type": "Creature",
+      "power": 3000,
+      "toughness": 2500,
+      "rarity": "Common",
+      "cost": 3
     }
   ]
 }

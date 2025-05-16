@@ -19,7 +19,7 @@ const rawData = JSON.parse(fs.readFileSync(cardsJSON, 'utf-8'))
 let cards = rawData.cards
 
 passport.use(new LocalStrategy((username, password, done) => {
-    const users = JSON.parse(fs.readFileSync(cardsJSON))
+    const users = JSON.parse(fs.readFileSync('./users.json'))
     const user = users.find(u => u.username === username && u.password === password)
     if (user) {
         return done(null, user)
@@ -30,11 +30,13 @@ passport.use(new LocalStrategy((username, password, done) => {
 
 app.post('/getToken', (req, res, next) => {
     passport.authenticate('local', { session: false }, (err, user, info) => {
+        console.log(err)
+        console.log(user)
         if (err || !user) {
             return res.status(401).json({ message: 'Authentication failed' })
         }
 
-        const token = jwt.sign({ username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' })
+        const token = jwt.sign({ username: user.username }, process.env.SECRET_KEY, { expiresIn: '1d' })
         res.json({ token });
     })(req, res, next)
 })
@@ -51,7 +53,7 @@ app.get('/cards', (req, res) => {
     res.json(filteredCards);
 })
 
-app.post('/cards/create', (req, res) => {
+app.post('/cards/create', isLoggedIn, (req, res) => {
     const newCard = req.body
     newCard.id = cards.reduce((maxId, card) => Math.max(maxId, card.id), 0) + 1;
     cards.push(newCard)
@@ -63,12 +65,12 @@ app.post('/cards/create', (req, res) => {
     })
 })
 
-app.put('/cards/:id', (req, res) => {
+app.put('/cards/:id', isLoggedIn, (req, res) => {
     const id = parseInt(req.params.id)
     const cardEdit = req.body
     let maxID = cards.reduce((maxId, card) => Math.max(maxId, card.id), 0) + 1;
     const index = cards.findIndex(card => card.id === id)
-    if (id > maxID || id < 0 || index === -1) {
+    if (index === -1) {
         res.status(400).json({
             message: 'This Card ID does not exist. Please try again',
         })
@@ -83,10 +85,41 @@ app.put('/cards/:id', (req, res) => {
     }
 })
 
+app.delete('/cards/:id', isLoggedIn, (req, res) => {
+    const id = parseInt(req.params.id)
+    const index = cards.findIndex(card => card.id === id)
+    if (index === -1) {
+        res.status(400).json({
+            message: 'This Card ID does not exist. Please try again',
+        })
+    } else {
+        let deletedCard = cards.splice(index, 1)
+        fs.writeFileSync(cardsJSON, JSON.stringify({cards}, null, 2), 'utf-8')
+        res.status(201).json({
+            message: 'Card deleted successfully',
+            card: deletedCard
+        })
+    }
+})
+
 app.listen(process.env.PORT, () => {
     console.log("Listening on port " + process.env.PORT)
 })
 
 function isLoggedIn(req, res, next) {
-    req.user ? next() : res.redirect('/')
+    const authHeader = req.headers['authorization']
+    if (!authHeader) {
+        return res.status(401).json({ message: 'No token provided' })
+    }
+    const token = authHeader.split(' ')[1]
+    if (!token) {
+        return res.status(401).json({ message: 'Token missing or malformed' })
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+        req.user = decoded
+        next()
+    } catch (err) {
+        return res.status(403).json({ message: 'Invalid token' })
+    }
 }
