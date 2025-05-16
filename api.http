@@ -6,28 +6,21 @@ Content-Type: application/json
     "password": "password123"
 }
 
-# ##
-# Get http://localhost:3000/users?userId=ctdalton
+###
+GET http://localhost:3000/cards?set=Base%20Set&type=Creature&rarity=Common
 
-# ###
-# POST http://localhost:3000/users/create
-# Content-Type: application/json
+###
+POST http://localhost:3000/cards/create
+Content-Type: application/json
 
-# {
-#     "userId": "ctdalton",
-#     "name": "curtis",
-#     "lastName:": "dalton",
-#     "email": "asdf@asdf.com"
-# }
-
-# ###
-# POST http://localhost:3000/login
-# Content-Type: application/json
-
-# {
-#     "userId": "kal",
-#     "password": "asdf"
-# }
-
-# ###
-# GET http://localhost:3000/getCourses
+{
+    "id": 126,
+    "name": "asdfd Magus",
+    "set": "Base Set",
+    "cardNumber": 1,
+    "type": "Creature",
+    "power": 3000,
+    "toughness": 2500,
+    "rarity": "Common",
+    "cost": 3
+}
