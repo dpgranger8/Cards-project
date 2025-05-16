@@ -53,6 +53,16 @@ app.get('/cards', (req, res) => {
     res.json(filteredCards);
 })
 
+app.get('/cards/count', (req, res) => {
+    res.json({message: "Number of cards:" + cards.length})
+})
+
+app.get('/cards/random', (req, res) => {
+    res.json({
+        card: getRandomElement(cards)
+    })
+})
+
 app.post('/cards/create', isLoggedIn, (req, res) => {
     const newCard = req.body
     newCard.id = cards.reduce((maxId, card) => Math.max(maxId, card.id), 0) + 1;
@@ -122,4 +132,12 @@ function isLoggedIn(req, res, next) {
     } catch (err) {
         return res.status(403).json({ message: 'Invalid token' })
     }
+}
+
+function getRandomElement(arr) {
+    if (!Array.isArray(arr) || arr.length === 0) {
+        return undefined;
+    }
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
 }

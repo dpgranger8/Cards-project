@@ -10,6 +10,12 @@ Content-Type: application/json
 GET http://localhost:3000/cards?set=Base%20Set&type=Creature&rarity=Common
 
 ###
+GET http://localhost:3000/cards/count
+
+###
+GET http://localhost:3000/cards/random
+
+###
 POST http://localhost:3000/cards/create
 Content-Type: application/json
 Authorization: Bearer <jwt_token>
