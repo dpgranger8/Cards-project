@@ -1,0 +1,33 @@
+POST http://localhost:3000/getToken
+Content-Type: application/json
+
+{
+    "username": "alice",
+    "password": "password123"
+}
+
+# ##
+# Get http://localhost:3000/users?userId=ctdalton
+
+# ###
+# POST http://localhost:3000/users/create
+# Content-Type: application/json
+
+# {
+#     "userId": "ctdalton",
+#     "name": "curtis",
+#     "lastName:": "dalton",
+#     "email": "asdf@asdf.com"
+# }
+
+# ###
+# POST http://localhost:3000/login
+# Content-Type: application/json
+
+# {
+#     "userId": "kal",
+#     "password": "asdf"
+# }
+
+# ###
+# GET http://localhost:3000/getCourses
