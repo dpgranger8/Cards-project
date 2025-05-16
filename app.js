@@ -53,19 +53,25 @@ app.get('/cards', (req, res) => {
 
 app.post('/cards/create', (req, res) => {
     const newCard = req.body
-    console.log(newCard)
-    cards.forEach(element => {
-        if (element.id === newCard.id) {
-            return res.status(400).json({ message: 'Card'})
-        }
-    });
+    newCard.id = cards.reduce((maxId, card) => Math.max(maxId, card.id), 0) + 1;
     cards.push(newCard)
-    fs.writeFileSync(cardsJSON, JSON.stringify(cards), 'utf-8')
+    fs.writeFileSync(cardsJSON, JSON.stringify({cards}, null, 2), 'utf-8')
 
     res.status(201).json({
         message: 'Card added successfully',
         card: newCard
     })
+})
+
+app.put('/cards/:id', (req, res) => {
+    const id = parseInt(req.params)
+    const card = req.body
+    let maxID = cards.reduce((maxId, card) => Math.max(maxId, card.id), 0) + 1;
+    if (id > maxID || id < 0) {
+        res.status(400).json({
+            message: 'This Card ID does not exist. Please try again',
+        })
+    }
 })
 
 app.listen(process.env.PORT, () => {
