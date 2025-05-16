@@ -64,12 +64,21 @@ app.post('/cards/create', (req, res) => {
 })
 
 app.put('/cards/:id', (req, res) => {
-    const id = parseInt(req.params)
-    const card = req.body
+    const id = parseInt(req.params.id)
+    const cardEdit = req.body
     let maxID = cards.reduce((maxId, card) => Math.max(maxId, card.id), 0) + 1;
-    if (id > maxID || id < 0) {
+    const index = cards.findIndex(card => card.id === id)
+    if (id > maxID || id < 0 || index === -1) {
         res.status(400).json({
             message: 'This Card ID does not exist. Please try again',
+        })
+    } else {
+        cardEdit.id = id
+        cards[index] = cardEdit
+        fs.writeFileSync(cardsJSON, JSON.stringify({cards}, null, 2), 'utf-8')
+        res.status(201).json({
+            message: 'Card edited successfully',
+            card: cardEdit
         })
     }
 })

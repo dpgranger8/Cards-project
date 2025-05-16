@@ -24,3 +24,19 @@ Content-Type: application/json
     "rarity": "Common",
     "cost": 3
 }
+
+###
+PUT http://localhost:3000/cards/13
+Content-Type: application/json
+
+{
+    "id": 126,
+    "name": "asdfd Magus",
+    "set": "Base Set",
+    "cardNumber": 1,
+    "type": "Creature",
+    "power": 3000,
+    "toughness": 2500,
+    "rarity": "Common",
+    "cost": 3
+}
